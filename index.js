@@ -1,8 +1,8 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
-const html_pdf = require('html-pdf');
-const axios = require('axios')
-const html = require('./html_gen')
+const axios = require('axios');
+
+const toPDF = require('pdf-puppeteer');
 
 const questions = [
     {
@@ -18,6 +18,7 @@ const questions = [
 ];
 
 function writeToFile(fileName, data) {
+    fs.writeFile()
  
 }
 
@@ -25,37 +26,63 @@ function writeToFile(fileName, data) {
 function init() {
 
     inquirer.prompt(questions)
-    .then(function({ username }) {
+    .then(function({ username , color }) {
+        
         const queryUrl = `https://api.github.com/users/${username}`;
-    
+        const favcolor = color;
         axios.get(queryUrl)
             .then(function(res) {
-                const user_info = res.data;
-                console.log(user_info)
-                const user_login = user_info.login; //ok
-                const user_location = user_info.location; // need google maps API
-                const user_profile = user_info.html_url; //ok
-                const user_blog = user_info.blog; //need to find 
-                const user_followers = user_info.followers; //ok
-                const user_following = user_info.following; //ok
-                const user_repo = user_info.public_repos; //ok
-                const user_bio = user_info.bio // ok
-                let location = user_location.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '').replace(' ','+').toLowerCase();
-                let locationURL = `https://www.google.com/maps/search/?api=1&query=${location}`
-                console.log(locationURL);
-                 axios.get(`https://api.github.com/users/${username}/starred`)
-                 .then(function(response){
-                    const user_stars = response.data.length
+                const user = res.data;
+                console.log(user)
+                return user
+            })
+            .then(function(user){
+    
+                const profile = {
+                    name: user.name,
+                    picture: user.avatar_url,
+                    color: color,
+                    location: user.location,
+                    profileLink: user.html_url,
+                    job: user.company,
+                    blog: user.blog,
+                    followers: user.followers,
+                    following: user.following,
+                    repos: user.public_repos,
+                    bio: user.bio,
+                    starsUrl: user.starred_url,
+                    stars: ''
+                }
+                
+                profile.starsUrl = profile.starsUrl.replace("{/owner}{/repo}",'')
+                return profile;
+            })
+            .then(function(profile){
+                axios.get(profile.starsUrl)
+                .then(function(res){
+                    const stars = res.data.length;
+                    profile.stars = stars;
+                    return profile;
                 })
-                // .then(function(location){
-                //     console.log(location);
-                // })
-                //console.log ()
-                const apiKey = "AIzaSyAgyWn-gduku8UTV6DhTEXWR8V0NHKuo8A"
-            
-        });
-    });
- }
+                
+                .then(function(profile){
+                    
+                    const place = profile.location.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '').replace(' ','+').toLowerCase();
+                    profile.locationURL = `https://www.google.com/maps/search/?api=1&query=${place}`
+                    return profile;
+                })
+                .then(function(profile){
+                    //writeToFile("make.pdf", profile)
+                    return module.exports.user_info = profile;
+                    
+                })
+                .then(function(){
+                    const genHtml = require('./html_gen');
+                })
+            })
+        })
+        
+  }
 
 
 init();

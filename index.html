@@ -1,36 +1,4 @@
-const js = require('./index')
-
-let data = js.user_info;
-const colors = {
-  green: {
-    wrapperBackground: "#E6E1C3",
-    headerBackground: "#C1C72C",
-    headerColor: "black",
-    photoBorderColor: "#black"
-  },
-  blue: {
-    wrapperBackground: "#5F64D3",
-    headerBackground: "#26175A",
-    headerColor: "white",
-    photoBorderColor: "#73448C"
-  },
-  pink: {
-    wrapperBackground: "#879CDF",
-    headerBackground: "#FF8374",
-    headerColor: "white",
-    photoBorderColor: "#FEE24C"
-  },
-  red: {
-    wrapperBackground: "#DE9967",
-    headerBackground: "#870603",
-    headerColor: "white",
-    photoBorderColor: "white"
-  }
-};
-
-function generateHTML(data) {
-
-  return `<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
    <head>
       <meta charset="UTF-8" />
@@ -56,7 +24,7 @@ function generateHTML(data) {
          height: 100%;
          }
          .wrapper {
-         background-color: ${colors[data.color].wrapperBackground};
+         background-color: #E6E1C3;
          padding-top: 100px;
          }
          body {
@@ -98,8 +66,8 @@ function generateHTML(data) {
          display: flex;
          justify-content: center;
          flex-wrap: wrap;
-         background-color: ${colors[data.color].headerBackground};
-         color: ${colors[data.color].headerColor};
+         background-color: #C1C72C;
+         color: black;
          padding: 10px;
          top: 30px
          width: 95%;
@@ -111,7 +79,7 @@ function generateHTML(data) {
          border-radius: 50%;
          object-fit: cover;
          margin-top: -75px;
-         border: 6px solid ${colors[data.color].photoBorderColor};
+         border: 6px solid #black;
          box-shadow: rgba(0, 0, 0, 0.3) 4px 1px 20px 4px;
          }
          .photo-header h1, .photo-header h2 {
@@ -155,11 +123,11 @@ function generateHTML(data) {
          .card {
            padding: 20px;
            border-radius: 6px;
-           background-color: ${colors[data.color].headerBackground};
-           color: ${colors[data.color].headerColor};
+           background-color: #C1C72C;
+           color: black;
            margin: 20px;
          }
-         
+
          .col {
          flex: 1;
          text-align: center;
@@ -171,33 +139,33 @@ function generateHTML(data) {
          font-weight: bold;
          }
 
-         @media print { 
-          body { 
-            zoom: .75; 
-          } 
+         @media print {
+          body {
+            zoom: .75;
+          }
          }
       </style>
-      
+
     <main>
       <div class ="wrapper">
          <div class = "container">
               <div class = "photo-header">
-                  <img src="${data.picture}" alt="profile_pic">
+                  <img src="https://avatars3.githubusercontent.com/u/56282208?v=4" alt="profile_pic">
                   <h1>Hi!</h1>
-                  <h2>My name is ${data.name}!</h2>
-                  <h4>${data.job}</h4>
+                  <h2>My name is Caleb Brochu!</h2>
+                  <h4>Crane Aerospace & Electronics</h4>
                   <div class = "links-nav">
-                      <a href="${data.locationUrl}" class = "nav-link"><i class="fas fa-location-arrow"></i> Seattle, WA</a>              <a href="https://github.com/caleb-brochu" class = "nav-link"><i class="fab fa-github-alt"></i> GitHub</a>
-                      <a href="${data.blog}" class = "nav-link"><i class="fas fa-rss"></i> Blog</a>
+                      <a href="undefined" class = "nav-link"><i class="fas fa-location-arrow"></i> Seattle, WA</a>              <a href="https://github.com/caleb-brochu" class = "nav-link"><i class="fab fa-github-alt"></i> GitHub</a>
+                      <a href="" class = "nav-link"><i class="fas fa-rss"></i> Blog</a>
                   </div>
               </div>
           </div>
       </div>
-  </main> 
+  </main>
   <body>
           <div class = "row">
               <div class = "container">
-                  <h3>${data.bio}</h3>
+                  <h3>University of Washington Coding Bootcamp</h3>
               </div>
           </div>
       <div class = "container">
@@ -205,13 +173,13 @@ function generateHTML(data) {
               <div class = "col">
                   <div class = "card">
                       <h3>Public Repositories</h3>
-                      <h5>${data.repos}</h5>
+                      <h5>16</h5>
                   </div>
               </div>
               <div class = "col">
                   <div class = "card">
                       <h3>Followers</h3>
-                      <h5>${data.followers}</h5>
+                      <h5>2</h5>
                   </div>
               </div>
           </div>
@@ -219,13 +187,13 @@ function generateHTML(data) {
               <div class = "col">
                   <div class = "card">
                       <h3>GitHub Stars</h3>
-                      <h5>${data.stars}</h5>
+                      <h5>1</h5>
                   </div>
-              </div>  
+              </div>
               <div class = "col">
                   <div class = "card">
                       <h3>Public Repositories</h3>
-                      <h5>${data.following}</h5>
+                      <h5>3</h5>
                   </div>
               </div>
           </div>
@@ -235,8 +203,3 @@ function generateHTML(data) {
       <div class = "container"></div>
       <div class = "container"></div>
   </main>
-      
-      `
-        }
-console.log(generateHTML(data))
-console.log(data)
