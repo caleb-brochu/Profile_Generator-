@@ -1,14 +1,20 @@
 const inquirer = require('inquirer');
-const fs = require('fs');
 const axios = require('axios');
-
-const toPDF = require('pdf-puppeteer');
+const genHtml = require('./html_gen')
+const puppeteer = require('puppeteer');
+const fs = require('fs-extra')
 
 const questions = [
     {
-        type: 'input',
+        type: 'list',
         message: 'What is your favorit color?',
-        name: 'color'
+        name: 'color',
+        choices: [
+            'red',
+            'green',
+            'blue',
+            'pink'
+        ]
     },
     {
         type: 'input',
@@ -17,23 +23,46 @@ const questions = [
     }
 ];
 
-function writeToFile(fileName, data) {
-    fs.writeFile()
- 
-}
+async function writeToFile(fileName, data) {
+       //console.log(data);
+            try{
+                const browser = await puppeteer.launch();
+                const page = await browser.newPage();
+                debugger
+                await page.setContent(data);
+                await page.emulateMedia('screen');
+                await page.setViewport({
+                    width: 1920,
+                    height: 1080
+                })
+                await page.pdf({
+                    path: `${fileName}.pdf`,
+                    format: 'A4',
+                    printBackground: true
+                });
+                console.log('done')
+                await browser.close
+                process.exit();
+            }
+            catch(err){
+                console.log(err);
+            }
+    }
+
 
 
 function init() {
 
     inquirer.prompt(questions)
-    .then(function({ username , color }) {
-        
+    .then(function(res) {
+
+        const favcolor = res.color;
+        const username = res.username;
         const queryUrl = `https://api.github.com/users/${username}`;
-        const favcolor = color;
+
         axios.get(queryUrl)
             .then(function(res) {
                 const user = res.data;
-                console.log(user)
                 return user
             })
             .then(function(user){
@@ -41,7 +70,7 @@ function init() {
                 const profile = {
                     name: user.name,
                     picture: user.avatar_url,
-                    color: color,
+                    color: favcolor,
                     location: user.location,
                     profileLink: user.html_url,
                     job: user.company,
@@ -62,27 +91,24 @@ function init() {
                 .then(function(res){
                     const stars = res.data.length;
                     profile.stars = stars;
-                    return profile;
-                })
-                
-                .then(function(profile){
-                    
                     const place = profile.location.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '').replace(' ','+').toLowerCase();
-                    profile.locationURL = `https://www.google.com/maps/search/?api=1&query=${place}`
+                    profile.locationURL = `https://www.google.com/maps/search/?api=1&query=${place}`;
+                    console.log(profile.locationURL);
                     return profile;
                 })
                 .then(function(profile){
-                    //writeToFile("make.pdf", profile)
-                    return module.exports.user_info = profile;
+                    
+                    const html = genHtml(profile);
+                    const file = profile.name.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '').replace(' ','_');
+                    writeToFile(`${file}_GitHub`, html);
+                    //console.log(profile);
                     
                 })
-                .then(function(){
-                    const genHtml = require('./html_gen');
-                })
+                .catch(function(err) {
+                    console.log(err);
+                });
             })
         })
         
   }
-
-
 init();

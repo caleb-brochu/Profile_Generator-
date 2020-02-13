@@ -6,7 +6,7 @@ const colors = {
     wrapperBackground: "#E6E1C3",
     headerBackground: "#C1C72C",
     headerColor: "black",
-    photoBorderColor: "#black"
+    photoBorderColor: "black"
   },
   blue: {
     wrapperBackground: "#5F64D3",
@@ -27,6 +27,7 @@ const colors = {
     photoBorderColor: "white"
   }
 };
+
 
 function generateHTML(data) {
 
@@ -101,7 +102,7 @@ function generateHTML(data) {
          background-color: ${colors[data.color].headerBackground};
          color: ${colors[data.color].headerColor};
          padding: 10px;
-         top: 30px
+         top: 30px;
          width: 95%;
          border-radius: 6px;
          }
@@ -138,11 +139,17 @@ function generateHTML(data) {
          margin-top: 10px;
          }
          .container {
-         padding: 50px;
+         padding: 20px;
          padding-left: 100px;
          padding-right: 100px;
          margin: 0px auto;
          }
+         .container-bio {
+          padding-top: 100px;
+          padding-left: 100px;
+          padding-right: 100px;
+          margin: 0px auto;
+          }
 
          .row {
            display: flex;
@@ -183,11 +190,12 @@ function generateHTML(data) {
          <div class = "container">
               <div class = "photo-header">
                   <img src="${data.picture}" alt="profile_pic">
-                  <h1>Hi!</h1>
-                  <h2>My name is ${data.name}!</h2>
-                  <h4>${data.job}</h4>
+                  <h2>Hi!</h2>
+                  <h3>My name is ${data.name}!</h3>
+                  <h5>${data.job}</h5>
                   <div class = "links-nav">
-                      <a href="${data.locationUrl}" class = "nav-link"><i class="fas fa-location-arrow"></i> Seattle, WA</a>              <a href="https://github.com/caleb-brochu" class = "nav-link"><i class="fab fa-github-alt"></i> GitHub</a>
+                      <a href= ${data.locationUrl} class = "nav-link"><i class="fas fa-location-arrow"></i> Seattle, WA</a>              
+                      <a href= ${data.profileLink} class = "nav-link"><i class="fab fa-github-alt"></i> GitHub</a>
                       <a href="${data.blog}" class = "nav-link"><i class="fas fa-rss"></i> Blog</a>
                   </div>
               </div>
@@ -196,21 +204,21 @@ function generateHTML(data) {
   </main> 
   <body>
           <div class = "row">
-              <div class = "container">
-                  <h3>${data.bio}</h3>
+              <div class = "container-bio">
+                  <h4>${data.bio}</h4>
               </div>
           </div>
       <div class = "container">
           <div class = "row">
               <div class = "col">
                   <div class = "card">
-                      <h3>Public Repositories</h3>
+                      <h4>Public Repositories</h4>
                       <h5>${data.repos}</h5>
                   </div>
               </div>
               <div class = "col">
                   <div class = "card">
-                      <h3>Followers</h3>
+                      <h4>Followers</h4>
                       <h5>${data.followers}</h5>
                   </div>
               </div>
@@ -218,13 +226,13 @@ function generateHTML(data) {
           <div class = "row">
               <div class = "col">
                   <div class = "card">
-                      <h3>GitHub Stars</h3>
+                      <h4>GitHub Stars</h4>
                       <h5>${data.stars}</h5>
                   </div>
               </div>  
               <div class = "col">
                   <div class = "card">
-                      <h3>Public Repositories</h3>
+                      <h4>Following</h4>
                       <h5>${data.following}</h5>
                   </div>
               </div>
@@ -234,9 +242,10 @@ function generateHTML(data) {
   <main>
       <div class = "container"></div>
       <div class = "container"></div>
+      <div class = "container"></div>
   </main>
       
       `
-        }
-console.log(generateHTML(data))
-console.log(data)
+}
+
+module.exports = generateHTML
